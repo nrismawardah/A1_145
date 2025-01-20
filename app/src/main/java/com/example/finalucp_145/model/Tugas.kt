@@ -3,6 +3,20 @@ package com.example.finalucp_145.model
 import kotlinx.serialization.Serializable
 
 @Serializable
+data class TugasResponse(
+    val status: Boolean,
+    val message: String,
+    val data: List<Tugas>
+)
+
+@Serializable
+data class TugasResponseDetail(
+    val status: Boolean,
+    val message: String,
+    val data: Tugas
+)
+
+@Serializable
 data class Tugas(
     val id_tugas: String,
     val id_proyek: String,
