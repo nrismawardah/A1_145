@@ -6,10 +6,12 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.finalucp_145.ProjectApplications
 import com.example.finalucp_145.ui.viewmodel.proyek.HomePryViewModel
+import com.example.finalucp_145.ui.viewmodel.proyek.InsertPryViewModel
 
 object PenyediaViewModel {
     val Factory = viewModelFactory {
         initializer { HomePryViewModel(projectApp().container.proyekRepository) }
+        initializer { InsertPryViewModel(projectApp().container.proyekRepository) }
     }
 }
 
