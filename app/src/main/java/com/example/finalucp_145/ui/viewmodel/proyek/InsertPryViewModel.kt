@@ -38,7 +38,7 @@ fun InsertUiEvent.toPry(): Proyek = Proyek(
     status_proyek = status_proyek
 )
 
-fun Proyek.toUiStateMhs(): InsertUiState = InsertUiState(
+fun Proyek.toUiStatePry(): InsertUiState = InsertUiState(
     insertUiEvent = toInsertUiEvent()
 )
 
