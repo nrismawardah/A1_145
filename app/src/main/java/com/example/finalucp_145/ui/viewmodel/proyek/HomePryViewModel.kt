@@ -30,7 +30,7 @@ class HomePryViewModel (private val pry: ProyekRepository) : ViewModel() {
         viewModelScope.launch {
             pryUiState = HomePryUiState.Loading
             pryUiState = try {
-                HomePryUiState.Success(pry.getAllProyek())
+                HomePryUiState.Success(pry.getAllProyek().data)
             } catch (e: IOException) {
                 HomePryUiState.Error
             } catch (e: HttpException) {
