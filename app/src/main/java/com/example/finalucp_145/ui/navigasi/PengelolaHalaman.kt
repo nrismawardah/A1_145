@@ -20,6 +20,8 @@ import com.example.finalucp_145.ui.view.proyek.DetailPryView
 import com.example.finalucp_145.ui.view.proyek.EditPryView
 import com.example.finalucp_145.ui.view.proyek.HomePryView
 import com.example.finalucp_145.ui.view.proyek.InsertPryView
+import com.example.finalucp_145.ui.view.tim.DestinasiHomeTim
+import com.example.finalucp_145.ui.view.tim.HomeTimView
 import com.example.finalucp_145.ui.view.tugas.DestinasiDetailTgs
 import com.example.finalucp_145.ui.view.tugas.DestinasiEditTgs
 import com.example.finalucp_145.ui.view.tugas.DestinasiHomeTgs
@@ -45,7 +47,9 @@ fun PengelolaHalaman(navController: NavHostController = rememberNavController())
                 onProyekClick = {
                     navController.navigate(DestinasiHomePry.route)
                 },
-                onTimClick = {},
+                onTimClick = {
+                    navController.navigate(DestinasiHomeTim.route)
+                },
                 onAnggotaClick = {}
             )
         }
@@ -173,6 +177,17 @@ fun PengelolaHalaman(navController: NavHostController = rememberNavController())
                     navigateToMainMenu = {navController.navigate(DestinasiSplash.route)}
                 )
             }
+        }
+
+        composable(
+            route = DestinasiHomeTim.route
+        ){
+            HomeTimView(
+                navigateToItemEntry = {},
+                onDetailClick = {},
+                onBack = {navController.popBackStack()},
+                navigateToMainMenu = {navController.navigate(DestinasiSplash.route)}
+            )
         }
     }
 }
