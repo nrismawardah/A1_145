@@ -11,6 +11,7 @@ import com.example.finalucp_145.ui.viewmodel.proyek.DetailPryViewModel
 import com.example.finalucp_145.ui.viewmodel.proyek.EditPryViewModel
 import com.example.finalucp_145.ui.viewmodel.proyek.HomePryViewModel
 import com.example.finalucp_145.ui.viewmodel.proyek.InsertPryViewModel
+import com.example.finalucp_145.ui.viewmodel.tim.HomeTimViewModel
 import com.example.finalucp_145.ui.viewmodel.tugas.DetailTgsViewModel
 import com.example.finalucp_145.ui.viewmodel.tugas.EditTgsViewModel
 import com.example.finalucp_145.ui.viewmodel.tugas.HomeTgsViewModel
@@ -29,6 +30,9 @@ object PenyediaViewModel {
         initializer { InsertTgsViewModel(projectApp().container.tugasRepository) }
         initializer { DetailTgsViewModel(createSavedStateHandle(), tugasRepository = projectApp().container.tugasRepository) }
         initializer { EditTgsViewModel(createSavedStateHandle(), tugasRepository = projectApp().container.tugasRepository) }
+
+        // Tim
+        initializer { HomeTimViewModel(projectApp().container.timRepository) }
     }
 }
 
