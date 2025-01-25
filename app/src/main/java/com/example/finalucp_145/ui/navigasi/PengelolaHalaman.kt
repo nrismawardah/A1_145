@@ -21,9 +21,11 @@ import com.example.finalucp_145.ui.view.proyek.EditPryView
 import com.example.finalucp_145.ui.view.proyek.HomePryView
 import com.example.finalucp_145.ui.view.proyek.InsertPryView
 import com.example.finalucp_145.ui.view.tugas.DestinasiDetailTgs
+import com.example.finalucp_145.ui.view.tugas.DestinasiEditTgs
 import com.example.finalucp_145.ui.view.tugas.DestinasiHomeTgs
 import com.example.finalucp_145.ui.view.tugas.DestinasiInsertTgs
 import com.example.finalucp_145.ui.view.tugas.DetailTgsView
+import com.example.finalucp_145.ui.view.tugas.EditTgsView
 import com.example.finalucp_145.ui.view.tugas.HomeTgsView
 import com.example.finalucp_145.ui.view.tugas.InsertTgsView
 import com.example.finalucp_145.ui.viewmodel.tugas.InsertTgsUiEvent
@@ -81,8 +83,7 @@ fun PengelolaHalaman(navController: NavHostController = rememberNavController())
                     onBack = {navController.popBackStack()},
                     onEditClick = { id_proyek ->
                         navController.navigate("${DestinasiEditPry.route}/$id_proyek")
-                        println(id_proyek)
-                    },
+                        println(id_proyek) },
                     navigateToMainMenu = {navController.navigate(DestinasiSplash.route)},
                     navigateToTugas = { proyekId ->
                         navController.navigate("${DestinasiHomeTgs.route}/$proyekId")
@@ -152,8 +153,24 @@ fun PengelolaHalaman(navController: NavHostController = rememberNavController())
             id_tugas?.let {
                 DetailTgsView(
                     onBack = {navController.popBackStack()},
-                    onEditClick = { },
+                    onEditClick = {id_tugas ->
+                        navController.navigate("${DestinasiEditTgs.route}/$id_tugas")
+                        println(id_tugas) },
                     navigateToMainMenu = {navController.navigate(DestinasiSplash.route)},
+                )
+            }
+        }
+        composable(
+            route = DestinasiEditTgs.routeWithArgs,
+            arguments = listOf(navArgument(DestinasiEditTgs.id_tugas){
+                type = NavType.StringType
+            })
+        ){
+            val id_tugas = it.arguments?.getString(DestinasiEditTgs.id_tugas)
+            id_tugas?.let {
+                EditTgsView(
+                    onBack = {navController.popBackStack()},
+                    navigateToMainMenu = {navController.navigate(DestinasiSplash.route)}
                 )
             }
         }
