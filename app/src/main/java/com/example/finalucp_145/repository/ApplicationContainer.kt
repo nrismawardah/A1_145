@@ -1,6 +1,7 @@
 package com.example.finalucp_145.repository
 
 import com.example.finalucp_145.service_api.ProyekService
+import com.example.finalucp_145.service_api.TimService
 import com.example.finalucp_145.service_api.TugasService
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
@@ -10,6 +11,7 @@ import retrofit2.Retrofit
 interface AppContainer {
     val proyekRepository: ProyekRepository
     val tugasRepository: TugasRepository
+    val timRepository: TimRepository
 }
 
 class ApplicationContainer : AppContainer {
@@ -24,4 +26,7 @@ class ApplicationContainer : AppContainer {
 
     private val tugasService: TugasService by lazy { retrofit.create(TugasService::class.java) }
     override val tugasRepository: TugasRepository by lazy { NetworkTugasRepository(tugasService) }
+
+    private val timService: TimService by lazy { retrofit.create(TimService::class.java) }
+    override val timRepository: TimRepository by lazy { NetworkTimRepository(timService) }
 }
