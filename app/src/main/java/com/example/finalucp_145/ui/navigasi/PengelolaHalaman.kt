@@ -2,12 +2,14 @@ package com.example.finalucp_145.ui.navigasi
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.finalucp_145.ui.PenyediaViewModel
 import com.example.finalucp_145.ui.view.DestinasiSplash
 import com.example.finalucp_145.ui.view.SplashView
 import com.example.finalucp_145.ui.view.proyek.DestinasiDetailPry
@@ -19,7 +21,11 @@ import com.example.finalucp_145.ui.view.proyek.EditPryView
 import com.example.finalucp_145.ui.view.proyek.HomePryView
 import com.example.finalucp_145.ui.view.proyek.InsertPryView
 import com.example.finalucp_145.ui.view.tugas.DestinasiHomeTgs
+import com.example.finalucp_145.ui.view.tugas.DestinasiInsertTgs
 import com.example.finalucp_145.ui.view.tugas.HomeTgsView
+import com.example.finalucp_145.ui.view.tugas.InsertTgsView
+import com.example.finalucp_145.ui.viewmodel.tugas.InsertTgsUiEvent
+import com.example.finalucp_145.ui.viewmodel.tugas.InsertTgsViewModel
 
 @Composable
 fun PengelolaHalaman(navController: NavHostController = rememberNavController()){
@@ -105,9 +111,30 @@ fun PengelolaHalaman(navController: NavHostController = rememberNavController())
         ) { backStackEntry ->
             val idProyek = backStackEntry.arguments?.getString(DestinasiHomeTgs.idProyek) ?: return@composable
             HomeTgsView(
-                navigateToItemEntryTgs = { },
+                navigateToItemEntryTgs = {
+                    navController.navigate("${DestinasiInsertTgs.route}/$idProyek")
+                },
                 navigateToMainMenu = {navController.navigate(DestinasiSplash.route)},
                 onBack = {navController.popBackStack()}
+            )
+        }
+        composable(
+            route = "${DestinasiInsertTgs.route}/{idProyek}",
+            arguments = listOf(navArgument("idProyek") {
+                type = NavType.StringType
+            })
+        ) { backStackEntry ->
+            val idProyek = backStackEntry.arguments?.getString("idProyek") ?: return@composable
+            val viewModel: InsertTgsViewModel = viewModel(factory = PenyediaViewModel.Factory)
+
+            InsertTgsView(
+                onBack = { navController.popBackStack() },
+                navigateToMainMenu = { navController.navigate(DestinasiSplash.route) },
+                viewModel = viewModel.apply {
+                    updateInsertTgsState(
+                        InsertTgsUiEvent(idProyek = idProyek)
+                    )
+                }
             )
         }
     }
