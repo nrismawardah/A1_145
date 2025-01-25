@@ -11,7 +11,10 @@ import com.example.finalucp_145.ui.viewmodel.proyek.DetailPryViewModel
 import com.example.finalucp_145.ui.viewmodel.proyek.EditPryViewModel
 import com.example.finalucp_145.ui.viewmodel.proyek.HomePryViewModel
 import com.example.finalucp_145.ui.viewmodel.proyek.InsertPryViewModel
+import com.example.finalucp_145.ui.viewmodel.tim.DetailTimViewModel
+import com.example.finalucp_145.ui.viewmodel.tim.EditTimViewModel
 import com.example.finalucp_145.ui.viewmodel.tim.HomeTimViewModel
+import com.example.finalucp_145.ui.viewmodel.tim.InsertTimViewModel
 import com.example.finalucp_145.ui.viewmodel.tugas.DetailTgsViewModel
 import com.example.finalucp_145.ui.viewmodel.tugas.EditTgsViewModel
 import com.example.finalucp_145.ui.viewmodel.tugas.HomeTgsViewModel
@@ -33,6 +36,10 @@ object PenyediaViewModel {
 
         // Tim
         initializer { HomeTimViewModel(projectApp().container.timRepository) }
+        initializer { InsertTimViewModel(projectApp().container.timRepository) }
+        initializer { DetailTimViewModel(createSavedStateHandle(), timRepository = projectApp().container.timRepository) }
+        initializer { EditTimViewModel(createSavedStateHandle(), timRepository = projectApp().container.timRepository) }
+
     }
 }
 
