@@ -31,6 +31,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -72,6 +73,9 @@ fun HomeTimView(
     val showDialog = remember { mutableStateOf(false) }
     val timToDelete = remember { mutableStateOf<Tim?>(null) }
 
+    LaunchedEffect (Unit){
+        viewModel.getTim()
+    }
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
