@@ -20,8 +20,10 @@ import com.example.finalucp_145.ui.view.proyek.DetailPryView
 import com.example.finalucp_145.ui.view.proyek.EditPryView
 import com.example.finalucp_145.ui.view.proyek.HomePryView
 import com.example.finalucp_145.ui.view.proyek.InsertPryView
+import com.example.finalucp_145.ui.view.tugas.DestinasiDetailTgs
 import com.example.finalucp_145.ui.view.tugas.DestinasiHomeTgs
 import com.example.finalucp_145.ui.view.tugas.DestinasiInsertTgs
+import com.example.finalucp_145.ui.view.tugas.DetailTgsView
 import com.example.finalucp_145.ui.view.tugas.HomeTgsView
 import com.example.finalucp_145.ui.view.tugas.InsertTgsView
 import com.example.finalucp_145.ui.viewmodel.tugas.InsertTgsUiEvent
@@ -115,7 +117,11 @@ fun PengelolaHalaman(navController: NavHostController = rememberNavController())
                     navController.navigate("${DestinasiInsertTgs.route}/$idProyek")
                 },
                 navigateToMainMenu = {navController.navigate(DestinasiSplash.route)},
-                onBack = {navController.popBackStack()}
+                onBack = {navController.popBackStack()},
+                onDetailClick = { id_tugas ->
+                    navController.navigate("${DestinasiDetailTgs.route}/$id_tugas")
+                    println(id_tugas)
+                },
             )
         }
         composable(
@@ -126,7 +132,6 @@ fun PengelolaHalaman(navController: NavHostController = rememberNavController())
         ) { backStackEntry ->
             val idProyek = backStackEntry.arguments?.getString("idProyek") ?: return@composable
             val viewModel: InsertTgsViewModel = viewModel(factory = PenyediaViewModel.Factory)
-
             InsertTgsView(
                 onBack = { navController.popBackStack() },
                 navigateToMainMenu = { navController.navigate(DestinasiSplash.route) },
@@ -136,6 +141,21 @@ fun PengelolaHalaman(navController: NavHostController = rememberNavController())
                     )
                 }
             )
+        }
+        composable(
+            route = DestinasiDetailTgs.routeWithArgs,
+            arguments = listOf(navArgument(DestinasiDetailTgs.id_tugas){
+                type = NavType.StringType
+            })
+        ){ backStackEntry ->
+            val id_tugas = backStackEntry.arguments?.getString(DestinasiDetailTgs.id_tugas)
+            id_tugas?.let {
+                DetailTgsView(
+                    onBack = {navController.popBackStack()},
+                    onEditClick = { },
+                    navigateToMainMenu = {navController.navigate(DestinasiSplash.route)},
+                )
+            }
         }
     }
 }
