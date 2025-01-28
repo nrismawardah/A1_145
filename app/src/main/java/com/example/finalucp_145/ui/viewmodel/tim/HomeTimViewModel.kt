@@ -22,6 +22,7 @@ class HomeTimViewModel (
 ) : ViewModel() {
 
     var timUiState: HomeTimUiState by mutableStateOf(HomeTimUiState.Loading)
+    var selectedTim: String by mutableStateOf("")
         private set
 
     init {
@@ -52,5 +53,9 @@ class HomeTimViewModel (
                 timUiState = HomeTimUiState.Error
             }
         }
+    }
+
+    fun selectTim(id_tim: String) {
+        selectedTim = id_tim
     }
 }
