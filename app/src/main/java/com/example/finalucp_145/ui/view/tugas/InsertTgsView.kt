@@ -11,8 +11,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.Button
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
@@ -20,7 +26,11 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -31,6 +41,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.finalucp_145.ui.PenyediaViewModel
 import com.example.finalucp_145.ui.navigasi.DestinasiNavigasi
 import com.example.finalucp_145.ui.view.customwidget.TopAppBar
+import com.example.finalucp_145.ui.viewmodel.tim.HomeTimUiState
+import com.example.finalucp_145.ui.viewmodel.tim.HomeTimViewModel
 import com.example.finalucp_145.ui.viewmodel.tugas.InsertTgsUiEvent
 import com.example.finalucp_145.ui.viewmodel.tugas.InsertTgsUiState
 import com.example.finalucp_145.ui.viewmodel.tugas.InsertTgsViewModel
@@ -47,10 +59,14 @@ fun InsertTgsView(
     onBack: () -> Unit,
     navigateToMainMenu: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: InsertTgsViewModel = viewModel(factory = PenyediaViewModel.Factory)
+    viewModel: InsertTgsViewModel = viewModel(factory = PenyediaViewModel.Factory),
+    timViewModel : HomeTimViewModel = viewModel(factory = PenyediaViewModel.Factory)
 ) {
     val coroutineScope = rememberCoroutineScope()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+
+    val timUistate = timViewModel.timUiState
+    val selectedTim by remember { mutableStateOf(timViewModel.selectedTim) }
 
     Scaffold(
         modifier = modifier.fillMaxSize()
@@ -82,6 +98,9 @@ fun InsertTgsView(
                     onBack()
                 }
             },
+            timUistate = timUistate,
+            selectedTim = selectedTim,
+            onTimSelected = { timViewModel.selectTim(it) },
             modifier = Modifier
                 .padding(innerPadding)
                 .verticalScroll(rememberScrollState())
@@ -94,6 +113,9 @@ fun InsertTgsView(
 fun InsertTgsBody(
     insertTgsUiState: InsertTgsUiState,
     onTugasValueChange: (InsertTgsUiEvent) -> Unit,
+    timUistate: HomeTimUiState,
+    selectedTim: String,
+    onTimSelected: (String) -> Unit = {},
     onSaveClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -104,7 +126,11 @@ fun InsertTgsBody(
         FormInsertTgs(
             insertTgsUiEvent = insertTgsUiState.insertTgsUiEvent,
             onValueChange = onTugasValueChange,
-            modifier = Modifier.fillMaxWidth()
+
+            modifier = Modifier.fillMaxWidth(),
+            timUistate = timUistate,
+            selectedTim = selectedTim,
+            onTimSelected = onTimSelected
         )
         Button(
             onClick = onSaveClick,
@@ -119,8 +145,11 @@ fun InsertTgsBody(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FormInsertTgs(
-        insertTgsUiEvent: InsertTgsUiEvent,
+    insertTgsUiEvent: InsertTgsUiEvent,
     modifier: Modifier = Modifier,
+    timUistate: HomeTimUiState,
+    selectedTim: String,
+    onTimSelected: (String) -> Unit = {},
     onValueChange: (InsertTgsUiEvent) -> Unit = {},
     enabled: Boolean = true
 ) {
@@ -148,14 +177,26 @@ fun FormInsertTgs(
             enabled = false,
             singleLine = true
         )
-        OutlinedTextField(
-            value = insertTgsUiEvent.id_tim,
-            onValueChange = { onValueChange(insertTgsUiEvent.copy(id_tim = it)) },
-            label = { Text("ID Tim") },
-            modifier = Modifier.fillMaxWidth(),
-            enabled = enabled,
-            singleLine = true
-        )
+        when(timUistate) {
+            is HomeTimUiState.Loading -> {
+                Text(text = "Loading")
+            }
+            is HomeTimUiState.Error -> {
+                Text(text = "Error")
+            }
+            is HomeTimUiState.Success -> {
+                DropDownMenu(
+                    title = "ID Tim",
+                    options = timUistate.tim.map { it.id_tim},
+                    selectedOption = selectedTim,
+                    onOptionSelected = { id_tim ->
+                        onTimSelected(id_tim)
+                        onValueChange(insertTgsUiEvent.copy(id_tim = id_tim))
+                    }
+                )
+            }
+        }
+
         OutlinedTextField(
             value = insertTgsUiEvent.nama_tugas,
             onValueChange = { onValueChange(insertTgsUiEvent.copy(nama_tugas = it)) },
@@ -217,6 +258,58 @@ fun FormInsertTgs(
                     )
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun DropDownMenu(
+    title: String,
+    options: List<String>,
+    selectedOption: String,
+    onOptionSelected: (String) -> Unit,
+    isError: Boolean = false,
+    errorMessage: String = ""
+) {
+    var expanded by remember { mutableStateOf(false) }
+    var currentSelected by remember { mutableStateOf(selectedOption) }
+
+    Column {
+        OutlinedTextField(
+            value = currentSelected,
+            onValueChange = { },
+            label = { Text(title) },
+            readOnly = true,
+            trailingIcon = {
+                IconButton(onClick = { expanded = !expanded }) {
+                    Icon(
+                        imageVector = if(expanded) Icons . Default . ArrowDropDown else Icons . Default . ArrowDropDown,
+                        contentDescription = null
+                    )
+                }
+            },
+            modifier = Modifier.fillMaxWidth()
+        )
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        ) {
+            options.forEach { option ->
+                DropdownMenuItem(
+                    text = { Text(option) },
+                    onClick = {
+                        onOptionSelected(option)
+                        currentSelected = option
+                        expanded = false
+                    }
+                )
+            }
+        }
+        if (isError && errorMessage != null) {
+            Text(
+                text = errorMessage,
+                color = Color.Red
+            )
         }
     }
 }

@@ -26,6 +26,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -60,6 +61,10 @@ fun DetailTgsView(
 ){
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
+    LaunchedEffect(Unit) {
+        detailTgsViewModel.getTgsById()
+    }
+
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
@@ -84,7 +89,8 @@ fun DetailTgsView(
                     val id_tugas = (detailTgsViewModel.detailTgsUiState as? DetailTgsUiState.Success)?.tugas?.id_tugas
                     if (id_tugas != null) onEditClick(id_tugas)
                 },
-                shape = MaterialTheme.shapes.medium
+                shape = MaterialTheme.shapes.medium,
+                containerColor = Color(0xfffdc938)
             ) {
                 Icon(
                     imageVector = Icons.Default.Edit,
@@ -96,7 +102,7 @@ fun DetailTgsView(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(innerPadding).offset(y = (-70).dp)
+                .padding(innerPadding)
         ) {
             DetailStatus(
                 tgsUiState = detailTgsViewModel.detailTgsUiState,
@@ -154,23 +160,29 @@ fun DetailTgsCard(
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
         shape = MaterialTheme.shapes.medium
     ) {
-        Column(
-            modifier = Modifier.padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+        Box (
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(color = Color(0xFFA3D3FF))
         ) {
-            ComponentDetailTgs(judul = "ID Tugas", isinya = tugas.id_tugas)
-            Spacer(modifier = Modifier.height(8.dp))
-            ComponentDetailTgs(judul = "ID Proyek", isinya = tugas.id_proyek)
-            Spacer(modifier = Modifier.height(8.dp))
-            ComponentDetailTgs(judul = "ID Tim", isinya = tugas.id_tim)
-            Spacer(modifier = Modifier.height(8.dp))
-            ComponentDetailTgs(judul = "Nama Tugas", isinya = tugas.nama_tugas)
-            Spacer(modifier = Modifier.height(8.dp))
-            ComponentDetailTgs(judul = "Deskripsi Tugas", isinya = tugas.deskripsi_tugas)
-            Spacer(modifier = Modifier.height(8.dp))
-            ComponentDetailTgs(judul = "Prioritas Tugas", isinya = tugas.prioritas)
-            Spacer(modifier = Modifier.height(8.dp))
-            ComponentDetailTgs(judul = "Status Tugas", isinya = tugas.status_tugas)
+            Column(
+                modifier = Modifier.padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                ComponentDetailTgs(judul = "ID Tugas", isinya = tugas.id_tugas)
+                Spacer(modifier = Modifier.height(8.dp))
+                ComponentDetailTgs(judul = "ID Proyek", isinya = tugas.id_proyek)
+                Spacer(modifier = Modifier.height(8.dp))
+                ComponentDetailTgs(judul = "ID Tim", isinya = tugas.id_tim)
+                Spacer(modifier = Modifier.height(8.dp))
+                ComponentDetailTgs(judul = "Nama Tugas", isinya = tugas.nama_tugas)
+                Spacer(modifier = Modifier.height(8.dp))
+                ComponentDetailTgs(judul = "Deskripsi Tugas", isinya = tugas.deskripsi_tugas)
+                Spacer(modifier = Modifier.height(8.dp))
+                ComponentDetailTgs(judul = "Prioritas Tugas", isinya = tugas.prioritas)
+                Spacer(modifier = Modifier.height(8.dp))
+                ComponentDetailTgs(judul = "Status Tugas", isinya = tugas.status_tugas)
+            }
         }
     }
 }
@@ -181,15 +193,13 @@ fun ComponentDetailTgs(
     judul: String,
     isinya: String,
 ) {
-    Row(
+    Column (
         modifier = modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
             text = "$judul:",
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold,
-            color = Color.Gray
+            fontSize = 15.sp,
+            color = Color.DarkGray
         )
         Text(
             text = isinya,
