@@ -132,13 +132,13 @@ fun DetailPryStatus(
             Column {
                 DetailPryCard(
                     proyek = pryUiState.proyek,
-                    modifier = modifier.padding(16.dp)
+                    modifier = modifier.padding(10.dp)
                 )
                 Button(
                     onClick = { navigateToTugas(pryUiState.proyek.id_proyek) }, // Navigasi ke daftar tugas
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 30.dp),
+                        .padding(horizontal = 30.dp).offset(y = (-10).dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color(0xFFFAB876),
                         contentColor = Color.Black
@@ -175,7 +175,7 @@ fun DetailPryCard(
     modifier: Modifier = Modifier
 ) {
     Card(
-        modifier = modifier,
+        modifier = modifier.offset(y = (-10).dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
         shape = MaterialTheme.shapes.medium
     ) {
@@ -185,7 +185,7 @@ fun DetailPryCard(
                 .background(color = Color(0xFFA3D3FF))
         ){
             Column(
-                modifier = Modifier.padding(16.dp),
+                modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 10.dp, bottom = 10.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 ComponentDetailPry(judul = "ID Proyek", isinya = proyek.id_proyek)
