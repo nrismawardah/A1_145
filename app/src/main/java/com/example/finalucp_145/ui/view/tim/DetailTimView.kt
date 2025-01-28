@@ -25,6 +25,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -59,6 +60,10 @@ fun DetailTimView(
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
+    LaunchedEffect(Unit) {
+        detailTimViewModel.getTimById()
+    }
+
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
@@ -83,7 +88,9 @@ fun DetailTimView(
                     val id_tim = (detailTimViewModel.detailTimUiState as? DetailTimUiState.Success)?.tim?.id_tim
                     if (id_tim != null) onEditClick(id_tim)
                 },
-                shape = MaterialTheme.shapes.medium
+                shape = MaterialTheme.shapes.medium,
+                containerColor = Color(0xfffdc938)
+
             ) {
                 Icon(
                     imageVector = Icons.Default.Edit,
@@ -153,15 +160,21 @@ fun DetailTimCard(
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
         shape = MaterialTheme.shapes.medium
     ) {
-        Column(
-            modifier = Modifier.padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+        Box (
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(color = Color(0xFFA3D3FF))
         ) {
-            ComponentDetailTim(judul = "ID Tim", isinya = tim.id_tim)
-            Spacer(modifier = Modifier.height(8.dp))
-            ComponentDetailTim(judul = "Nama Tim", isinya = tim.nama_tim)
-            Spacer(modifier = Modifier.height(8.dp))
-            ComponentDetailTim(judul = "Deskripsi Tim", isinya = tim.deskripsi_tim)
+            Column(
+                modifier = Modifier.padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                ComponentDetailTim(judul = "ID Tim", isinya = tim.id_tim)
+                Spacer(modifier = Modifier.height(8.dp))
+                ComponentDetailTim(judul = "Nama Tim", isinya = tim.nama_tim)
+                Spacer(modifier = Modifier.height(8.dp))
+                ComponentDetailTim(judul = "Deskripsi Tim", isinya = tim.deskripsi_tim)
+            }
         }
     }
 }
@@ -172,15 +185,13 @@ fun ComponentDetailTim(
     judul: String,
     isinya: String,
 ) {
-    Row(
+    Column(
         modifier = modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
             text = "$judul:",
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold,
-            color = Color.Gray
+            fontSize = 15.sp,
+            color = Color.DarkGray
         )
         Text(
             text = isinya,

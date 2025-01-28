@@ -121,7 +121,6 @@ fun InsertTimBody(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FormInsertTim(
     insertUiEvent: InsertUiEvent,

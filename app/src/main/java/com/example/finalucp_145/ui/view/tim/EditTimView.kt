@@ -43,8 +43,6 @@ fun EditTimView(
     val coroutineScope = rememberCoroutineScope()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
-    val uiState = viewModel.uiState
-
     Scaffold(
         modifier = modifier.fillMaxSize()
             .nestedScroll(scrollBehavior.nestedScrollConnection),
