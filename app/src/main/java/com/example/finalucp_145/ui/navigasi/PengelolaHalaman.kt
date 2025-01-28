@@ -12,6 +12,14 @@ import androidx.navigation.navArgument
 import com.example.finalucp_145.ui.PenyediaViewModel
 import com.example.finalucp_145.ui.view.DestinasiSplash
 import com.example.finalucp_145.ui.view.SplashView
+import com.example.finalucp_145.ui.view.anggota.DestinasiDetailAng
+import com.example.finalucp_145.ui.view.anggota.DestinasiEditAng
+import com.example.finalucp_145.ui.view.anggota.DestinasiHomeAng
+import com.example.finalucp_145.ui.view.anggota.DestinasiInsertAng
+import com.example.finalucp_145.ui.view.anggota.DetailAngView
+import com.example.finalucp_145.ui.view.anggota.EditAngView
+import com.example.finalucp_145.ui.view.anggota.HomeAngView
+import com.example.finalucp_145.ui.view.anggota.InsertAngView
 import com.example.finalucp_145.ui.view.proyek.DestinasiDetailPry
 import com.example.finalucp_145.ui.view.proyek.DestinasiEditPry
 import com.example.finalucp_145.ui.view.proyek.DestinasiHomePry
@@ -56,7 +64,9 @@ fun PengelolaHalaman(navController: NavHostController = rememberNavController())
                 onTimClick = {
                     navController.navigate(DestinasiHomeTim.route)
                 },
-                onAnggotaClick = {}
+                onAnggotaClick = {
+                    navController.navigate(DestinasiHomeAng.route)
+                },
             )
         }
         composable(
@@ -236,6 +246,60 @@ fun PengelolaHalaman(navController: NavHostController = rememberNavController())
             val id_tim = it.arguments?.getString(DestinasiEditTim.id_tim)
             id_tim?.let {
                 EditTimView(
+                    onBack = { navController.popBackStack() },
+                    navigateToMainMenu = { navController.navigate(DestinasiSplash.route) }
+                )
+            }
+        }
+
+        composable(
+            route = DestinasiHomeAng.route
+        ){
+            HomeAngView(
+                navigateToItemEntry = { navController.navigate(DestinasiInsertAng.route) },
+                onDetailClick = { id_anggota ->
+                    navController.navigate("${DestinasiDetailAng.route}/$id_anggota")
+                    println(id_anggota)
+                },
+                onBack = { navController.popBackStack() },
+                navigateToMainMenu = { navController.navigate(DestinasiSplash.route) }
+            )
+        }
+        composable(
+            route = DestinasiInsertAng.route
+        ){
+            InsertAngView(
+                onBack = { navController.popBackStack() },
+                navigateToMainMenu = { navController.navigate(DestinasiSplash.route) }
+            )
+        }
+        composable(
+            route = DestinasiDetailAng.routeWithArgs,
+            arguments = listOf(navArgument(DestinasiDetailAng.id_anggota) {
+                type = NavType.StringType
+            })
+        ){ backStackEntry ->
+            val id_anggota = backStackEntry.arguments?.getString(DestinasiDetailAng.id_anggota)
+            id_anggota?.let {
+                DetailAngView(
+                    onBack = { navController.popBackStack() },
+                    onEditClick = { id_anggota ->
+                        navController.navigate("${DestinasiEditAng.route}/$id_anggota")
+                        println(id_anggota)
+                    },
+                    navigateToMainMenu = { navController.navigate(DestinasiSplash.route) }
+                )
+            }
+        }
+        composable(
+            route = DestinasiEditAng.routeWithArgs,
+            arguments = listOf(navArgument(DestinasiEditAng.id_anggota) {
+                type = NavType.StringType
+            })
+        ){
+            val id_anggota = it.arguments?.getString(DestinasiEditAng.id_anggota)
+            id_anggota?.let {
+                EditAngView(
                     onBack = { navController.popBackStack() },
                     navigateToMainMenu = { navController.navigate(DestinasiSplash.route) }
                 )
