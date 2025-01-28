@@ -136,7 +136,10 @@ fun InsertAngBody(
         Button(
             onClick = onSaveClick,
             shape = MaterialTheme.shapes.small,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            colors = androidx.compose.material3.ButtonDefaults.buttonColors(
+                containerColor = Color(0xff3aaffe)
+            )
         ) {
             Text(text = "Simpan")
         }
