@@ -7,6 +7,10 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.finalucp_145.ProjectApplications
+import com.example.finalucp_145.ui.viewmodel.anggota.DetailAngViewModel
+import com.example.finalucp_145.ui.viewmodel.anggota.EditAngViewModel
+import com.example.finalucp_145.ui.viewmodel.anggota.HomeAngViewModel
+import com.example.finalucp_145.ui.viewmodel.anggota.InsertAngViewModel
 import com.example.finalucp_145.ui.viewmodel.proyek.DetailPryViewModel
 import com.example.finalucp_145.ui.viewmodel.proyek.EditPryViewModel
 import com.example.finalucp_145.ui.viewmodel.proyek.HomePryViewModel
@@ -40,6 +44,11 @@ object PenyediaViewModel {
         initializer { DetailTimViewModel(createSavedStateHandle(), timRepository = projectApp().container.timRepository) }
         initializer { EditTimViewModel(createSavedStateHandle(), timRepository = projectApp().container.timRepository) }
 
+        // Anggota
+        initializer { HomeAngViewModel(projectApp().container.anggotaRepository) }
+        initializer { InsertAngViewModel(projectApp().container.anggotaRepository) }
+        initializer { DetailAngViewModel(createSavedStateHandle(), anggotaRepository = projectApp().container.anggotaRepository) }
+        initializer { EditAngViewModel(createSavedStateHandle(), anggotaRepository = projectApp().container.anggotaRepository) }
     }
 }
 
